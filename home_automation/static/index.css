@@ -1,0 +1,83 @@
+body{
+    background-color: #00838F;
+}
+
+.advanced{
+
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    color: #00838f !important;
+}
+
+
+.btn-secondary,
+.btn-secondary:focus,
+.btn-secondary:active
+
+
+ {
+    color: #fff;
+    background-color: #00838f !important;
+    border-color: #00838f !important;
+    box-shadow: none;
+}
+
+
+.form-control:focus{
+    box-shadow: none;
+    border: 1px solid #00838f;
+
+
+}
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+form {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#commandInput {
+    width: 70%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+}
+
+#commandInput:focus {
+    border-color: #007bff;
+}
+
+input[type="submit"] {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+#response:before {
+    content: "\1F508"; /* Unicode character for speaker symbol */
+    font-size: 20px; /* Adjust the size as needed */
+    margin-right: 10px; /* Add some spacing between the symbol and the response */
+}
+
+/* Remove box styling */
+#response {
+    border: none;
+    background: none;
+    padding: 0;
+}
+
+

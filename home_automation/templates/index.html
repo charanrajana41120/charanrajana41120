@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Command Interface</title>
+    <link rel="stylesheet" type="text/css" href="/static/index.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card p-3 py-4">
+                    <h5 class="text-center mb-4">AI Home Automation</h5>
+                    <div class="row g-3 align-items-center">
+                        <div class="col-md-12"> <!-- Expand to full width -->
+                            <div class="p-3 border rounded"> <!-- Add border and rounded corners -->
+                                <form id="commandForm">
+                                    <div class="input-group mb-3"> <!-- Use input group -->
+                                        <span class="input-group-text"> <!-- Add-on for input group -->
+                                            <i class="fa fa-cog"></i> <!-- Icon for select option -->
+                                        </span>
+                                        <select class="form-select" id="commandDropdown">
+                                            <option value="none" selected disabled hidden>Home Devices</option>
+                                            <option value="Fans">Control Fans</option>
+                                            <option value="Lights">Control Lights</option>
+                                            <option value="Doors">Control Doors</option>
+                                            <option value="AC">Control AC's</option>
+                                            <option value="Sound">Control Sound Systems</option>
+                                            <option value="Others">Control Others</option>
+                                        </select>
+                                    </div>
+                                    <p class="mb-0">Select a command:</p>
+                                    <div class="mb-3"> <!-- Add margin bottom -->
+                                        <input type="radio" id="turn-on" name="command" value="turn-on">
+                                        <label for="turn-on">Do you want to turn on the selected device?</label><br>
+                                        <input type="radio" id="turn-off" name="command" value="turn-off">
+                                        <label for="turn-off">Do you want to turn off the selected device?</label><br>
+                                        <!-- Add more radio buttons for other commands -->
+                                    </div>
+                                    <div id="commandOptions" style="display: none;"></div>
+                                    <input type="submit" class="btn btn-secondary btn-block" value="Submit">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="response" class="mt-4"></div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Bootstrap Bundle with Popper and jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Function to send command to the server and play audio response
+        function sendCommand(command, selectedOption) {
+            fetch('/voice-command', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ command, selectedOption })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('response').innerText = data.response;
+                    // Play audio after displaying response
+                    var audio = new Audio('/audio');
+                    audio.play();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        // Event listener for form submission
+        document.getElementById('commandForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            var selectedOption = document.getElementById('commandDropdown').value;
+            var selectedCommand = null;
+            var onOffValue = null;
+
+            // Check the value of the selected radio button
+            if (document.getElementById('turn-on').checked) {
+                selectedCommand = document.getElementById('turn-on');
+                onOffValue = selectedCommand.value;
+            } else if (document.getElementById('turn-off').checked) {
+                selectedCommand = document.getElementById('turn-off');
+                onOffValue = selectedCommand.value;
+            }
+
+            // Check if a command is selected
+            if (selectedCommand && selectedOption) {
+                sendCommand(onOffValue, selectedOption);
+            } else {
+                console.error('No command or option selected.');
+            }
+        });
+
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', event => {
+                var selectedOption = item.getAttribute('data-value');
+                var commandOptions = document.getElementById('commandOptions');
+
+                // Hide all command options
+                var allOptions = document.querySelectorAll('#commandOptions > input[type="radio"]');
+                allOptions.forEach(option => {
+                    option.checked = false;
+                });
+
+                // Show command options based on selected dropdown value
+                switch (selectedOption) {
+                    case 'Fans':
+                    case 'Lights':
+                    case 'Doors':
+                    case 'AC':
+                    case 'Sound':
+                    case 'Others':
+                        commandOptions.style.display = 'block';
+                        break;
+                    default:
+                        commandOptions.style.display = 'none';
+                }
+            });
+        });
+        
+        function getSelectedOption() {
+            var selectedOption = document.getElementById('commandDropdown').value;
+            alert("Selected Option: " + selectedOption);
+        }
+
+    </script>
+
+</body>
+
+
+</html>
