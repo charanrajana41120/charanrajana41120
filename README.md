@@ -1,1 +1,6 @@
-As an AI and Data Science student with skills in AI algorithms, Python development, and core Java, I also have basic knowledge of React and Node.js. I am passionate about creating innovative, scalable solutions.
+Integration of Speech Recognition APIs and Natural Language Processing
+for Enhanced Automation and Personalized User Experience
+Description :
+A voice recognition API allows developers to easily incorporate speech-to-text
+functionality into their applications, enabling users to interact with the software
+using their voices.
